@@ -7,6 +7,7 @@
     <attr name="stl_indicatorInterpolation" format="enum">
       <enum name="smart" value="0"/>
       <enum name="linear" value="1"/>
+      <enum name="versa" value="2" />
     </attr>
     <attr name="stl_indicatorGravity" format="enum">
       <enum name="bottom" value="0"/>
@@ -20,6 +21,9 @@
       <enum name="auto" value="-1"/>
     </attr>
     <attr name="stl_indicatorCornerRadius" format="dimension"/>
+    <attr name="stl_indicatorLeftOffset" format="dimension" />
+    <attr name="stl_indicatorRightOffset" format="dimension" />
+    <attr name="stl_indicatorVerticalOffset" format="dimension" />
     <attr name="stl_overlineColor" format="color"/>
     <attr name="stl_overlineThickness" format="dimension"/>
     <attr name="stl_underlineColor" format="color"/>

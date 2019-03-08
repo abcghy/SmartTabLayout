@@ -69,6 +69,9 @@ class SmartTabStrip extends LinearLayout {
   private final int indicatorWidth;
   private final int indicatorGravity;
   private final float indicatorCornerRadius;
+  private final int indicatorLeftOffset;
+  private final int indicatorRightOffset;
+  private final int indicatorVerticalOffset;
   private final Paint indicatorPaint;
   private final int dividerThickness;
   private final Paint dividerPaint;
@@ -82,11 +85,13 @@ class SmartTabStrip extends LinearLayout {
   private SmartTabIndicationInterpolator indicationInterpolator;
   private SmartTabLayout.TabColorizer customTabColorizer;
 
+  private float density;
+
   SmartTabStrip(Context context, AttributeSet attrs) {
     super(context);
     setWillNotDraw(false);
 
-    final float density = getResources().getDisplayMetrics().density;
+    density = getResources().getDisplayMetrics().density;
 
     TypedValue outValue = new TypedValue();
     context.getTheme().resolveAttribute(android.R.attr.colorForeground, outValue, true);
@@ -102,6 +107,9 @@ class SmartTabStrip extends LinearLayout {
     int indicatorThickness = (int) (SELECTED_INDICATOR_THICKNESS_DIPS * density);
     int indicatorWidth = AUTO_WIDTH;
     float indicatorCornerRadius = DEFAULT_INDICATOR_CORNER_RADIUS * density;
+    int indicatorLeftOffset = 0;
+    int indicatorRightOffset = 0;
+    int indicatorVerticalOffset = 0;
     int overlineColor = setColorAlpha(themeForegroundColor, DEFAULT_TOP_BORDER_COLOR_ALPHA);
     int overlineThickness = (int) (DEFAULT_TOP_BORDER_THICKNESS_DIPS * density);
     int underlineColor = setColorAlpha(themeForegroundColor, DEFAULT_BOTTOM_BORDER_COLOR_ALPHA);
@@ -132,6 +140,12 @@ class SmartTabStrip extends LinearLayout {
         R.styleable.stl_SmartTabLayout_stl_indicatorWidth, indicatorWidth);
     indicatorCornerRadius = a.getDimension(
         R.styleable.stl_SmartTabLayout_stl_indicatorCornerRadius, indicatorCornerRadius);
+    indicatorLeftOffset = a.getDimensionPixelSize(
+        R.styleable.stl_SmartTabLayout_stl_indicatorLeftOffset, indicatorLeftOffset);
+    indicatorRightOffset = a.getDimensionPixelSize(
+        R.styleable.stl_SmartTabLayout_stl_indicatorRightOffset, indicatorRightOffset);
+    indicatorVerticalOffset = a.getDimensionPixelSize(
+        R.styleable.stl_SmartTabLayout_stl_indicatorVerticalOffset, indicatorVerticalOffset);
     overlineColor = a.getColor(
         R.styleable.stl_SmartTabLayout_stl_overlineColor, overlineColor);
     overlineThickness = a.getDimensionPixelSize(
@@ -176,6 +190,10 @@ class SmartTabStrip extends LinearLayout {
     this.indicatorPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     this.indicatorCornerRadius = indicatorCornerRadius;
     this.indicatorGravity = indicatorGravity;
+
+    this.indicatorLeftOffset = indicatorLeftOffset;
+    this.indicatorRightOffset = indicatorRightOffset;
+    this.indicatorVerticalOffset = indicatorVerticalOffset;
 
     this.dividerHeight = DEFAULT_DIVIDER_HEIGHT;
     this.dividerPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -318,6 +336,11 @@ class SmartTabStrip extends LinearLayout {
         thickness = thickness * thicknessOffset;
       }
 
+      left -= density * 3 + 0.5f;
+      left += indicatorLeftOffset;
+      right -= density * 3 + 0.5f;
+      right += indicatorRightOffset;
+
       drawIndicator(canvas, left, right, height, thickness, color);
 
     }
@@ -382,6 +405,10 @@ class SmartTabStrip extends LinearLayout {
         top = center - (thickness / 2f);
         bottom = center + (thickness / 2f);
     }
+
+    // set vertical offset
+    top += indicatorVerticalOffset;
+    bottom += indicatorVerticalOffset;
 
     indicatorPaint.setColor(color);
     if (indicatorWidth == AUTO_WIDTH) {
